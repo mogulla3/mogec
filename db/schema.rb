@@ -15,15 +15,15 @@ ActiveRecord::Schema.define(version: 20180323071005) do
   create_table "items", force: :cascade do |t|
     t.string "name", null: false
     t.integer "price", null: false
-    t.integer "store_id"
+    t.integer "store_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["store_id"], name: "index_items_on_store_id"
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer "item_id"
-    t.integer "user_id"
+    t.integer "item_id", null: false
+    t.integer "user_id", null: false
     t.datetime "ordered_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
