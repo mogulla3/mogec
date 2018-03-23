@@ -1,8 +1,8 @@
 class CreateUsers < ActiveRecord::Migration[5.1]
   def change
     create_table :users do |t|
-      t.string :name
-      t.string :rank
+      t.string :name, null: false
+      t.string :rank, default: "bronze"
 
       t.timestamps
     end
