@@ -3,25 +3,34 @@ require "mogec/userrank_updater"
 
 RSpec.describe Mogec::UserRankUpdater do
   describe "#run" do
-    context "When user purchased 10000 yen" do
-      it "user's rank should be normal" do
-        user = FactoryBot.create(:user_10000)
-        options = { user: user.id }
-        userrank_updater = Mogec::UserRankUpdater.new(options)
-        userrank_updater.run
+    subject(:user_rank) { user.reload.rank }
+    let(:options) { { user: user.id } }
 
-        expect(user.reload.rank).to eq "normal"
+    before do
+      Mogec::UserRankUpdater.new(options).run
+    end
+
+    context "when user purchased 10000 yen" do
+      let(:user) { FactoryBot.create(:user_10000) }
+
+      it "user's rank should be normal" do
+        is_expected.to eq "normal"
       end
     end
 
-    context "When user purchased 10001 yen" do
-      it "user's rank should be bronze" do
-        user = FactoryBot.create(:user_10001)
-        options = { user: user.id }
-        userrank_updater = Mogec::UserRankUpdater.new(options)
-        userrank_updater.run
+    context "when user purchased 10001 yen" do
+      let(:user) { FactoryBot.create(:user_10001) }
 
-        expect(user.reload.rank).to eq "bronze"
+      it "user's rank should be bronze" do
+        is_expected.to eq "bronze"
+      end
+    end
+
+    context "when user purchased 30001 yen" do
+      let(:user) { FactoryBot.create(:user_30001) }
+
+      it "user's rank should be silver" do
+        is_expected.to eq "silver"
       end
     end
   end

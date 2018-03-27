@@ -30,6 +30,8 @@ module Mogec
                  "normal"
                when 10_001..30_000
                  "bronze"
+               when 30_001..70_000
+                 "silver"
                end
 
         User.find_by(id: user_id).update(rank: rank)

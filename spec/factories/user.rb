@@ -24,5 +24,11 @@ FactoryBot.define do
         create(:order_10001, user_id: user.id)
       end
     end
+
+    factory :user_30001 do
+      after(:create) do |user, _|
+        create(:order_30001, user_id: user.id)
+      end
+    end
   end
 end
