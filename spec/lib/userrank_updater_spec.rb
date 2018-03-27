@@ -1,70 +1,74 @@
 require "rails_helper"
 require "mogec/userrank_updater"
 
-# patterns
-# - [x] order_price 0(normal)
-# - [x] order_price 10000(normal)
-# - [x] order_price 10001(bronze)
-# - [x] order_price 30000(bronze)
-# - [x] order_price 30001(silver)
-# - [x] order_price 70000(silver)
-# - [ ] order_price 70001(gold)
-# - [ ] order_price 100000(gold)
-# - [ ] order_price 100001(pratinum)
 RSpec.describe Mogec::UserRankUpdater do
   describe "#run" do
-    let(:user) { FactoryBot.create(:user, :purchased, price: price) }
+    shared_examples "not changing user rank" do
+      it "should not change user rank" do
+        expect {
+          Mogec::UserRankUpdater.new(user: user.id).run
+        }.to_not change { user.reload.rank }
+      end
+    end
 
-    before do
-      Mogec::UserRankUpdater.new(user: user.id).run
+    shared_examples "changing user rank according to purchase price" do
+      it "should change user rank" do
+        expect {
+          Mogec::UserRankUpdater.new(user: user.id).run
+        }.to change { user.reload.rank }.from("normal").to(rank)
+      end
     end
 
     context "when user purchased 0 yen" do
       let(:user) { FactoryBot.create(:user) }
-
-      it "user's rank should be normal" do
-        expect(user.reload.rank).to eq "normal"
-      end
+      it_behaves_like "not changing user rank"
     end
 
     context "when user purchased 10000 yen" do
-      let(:price) { 10000 }
-
-      it "user's rank should be normal" do
-        expect(user.reload.rank).to eq "normal"
-      end
+      let(:user) { FactoryBot.create(:user, :purchased, price: 10000) }
+      it_behaves_like "not changing user rank"
     end
 
     context "when user purchased 10001 yen" do
-      let(:price) { 10001 }
-
-      it "user's rank should be bronze" do
-        expect(user.reload.rank).to eq "bronze"
-      end
+      let(:user) { FactoryBot.create(:user, :purchased, price: 10001) }
+      let(:rank) { "bronze" }
+      it_behaves_like "changing user rank according to purchase price"
     end
 
     context "when user purchased 30000 yen" do
-      let(:price) { 30000 }
-
-      it "user's rank should be bronze" do
-        expect(user.reload.rank).to eq "bronze"
-      end
+      let(:user) { FactoryBot.create(:user, :purchased, price: 30000) }
+      let(:rank) { "bronze" }
+      it_behaves_like "changing user rank according to purchase price"
     end
 
     context "when user purchased 30001 yen" do
-      let(:price) { 30001 }
-
-      it "user's rank should be silver" do
-        expect(user.reload.rank).to eq "silver"
-      end
+      let(:user) { FactoryBot.create(:user, :purchased, price: 30001) }
+      let(:rank) { "silver" }
+      it_behaves_like "changing user rank according to purchase price"
     end
 
     context "when user purchased 70000 yen" do
-      let(:price) { 70000 }
+      let(:user) { FactoryBot.create(:user, :purchased, price: 70000) }
+      let(:rank) { "silver" }
+      it_behaves_like "changing user rank according to purchase price"
+    end
 
-      it "user's rank should be silver" do
-        expect(user.reload.rank).to eq "silver"
-      end
+    context "when user purchased 70001 yen" do
+      let(:user) { FactoryBot.create(:user, :purchased, price: 70001) }
+      let(:rank) { "gold" }
+      it_behaves_like "changing user rank according to purchase price"
+    end
+
+    context "when user purchased 100000 yen" do
+      let(:user) { FactoryBot.create(:user, :purchased, price: 100000) }
+      let(:rank) { "gold" }
+      it_behaves_like "changing user rank according to purchase price"
+    end
+
+    context "when user purchased 100001 yen" do
+      let(:user) { FactoryBot.create(:user, :purchased, price: 100001) }
+      let(:rank) { "pratinum" }
+      it_behaves_like "changing user rank according to purchase price"
     end
   end
 end

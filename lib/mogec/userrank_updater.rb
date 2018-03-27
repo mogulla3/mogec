@@ -26,12 +26,11 @@ module Mogec
         total_price = Item.where(id: items).sum(:price)
 
         rank = case total_price
-               when 0..10_000
-                 "normal"
-               when 10_001..30000
-                 "bronze"
-               when 30_001..70000
-                 "silver"
+               when 0..10000 then "normal"
+               when 10001..30000 then "bronze"
+               when 30001..70000 then "silver"
+               when 70001..100000 then "gold"
+               when 100001..Float::INFINITY then "pratinum"
                end
 
         User.find_by(id: user_id).update(rank: rank)
