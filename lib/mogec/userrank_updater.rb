@@ -30,7 +30,7 @@ module Mogec
                  "normal"
                when 10_001..30000
                  "bronze"
-               when 30_001
+               when 30_001..70000
                  "silver"
                end
 
