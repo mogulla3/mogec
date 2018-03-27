@@ -13,6 +13,9 @@ FactoryBot.define do
     name "user"
     rank "normal"
 
+    factory :user_0 do
+    end
+
     factory :user_10000 do
       after(:create) do |user, _|
         create(:order_10000, user_id: user.id)

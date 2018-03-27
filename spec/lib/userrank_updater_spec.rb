@@ -10,6 +10,14 @@ RSpec.describe Mogec::UserRankUpdater do
       Mogec::UserRankUpdater.new(options).run
     end
 
+    context "when user purchased 0 yen" do
+      let(:user) { FactoryBot.create(:user_0) }
+
+      it "user's rank should be normal" do
+        is_expected.to eq "normal"
+      end
+    end
+
     context "when user purchased 10000 yen" do
       let(:user) { FactoryBot.create(:user_10000) }
 
