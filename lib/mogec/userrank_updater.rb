@@ -28,7 +28,7 @@ module Mogec
         rank = case total_price
                when 0..10_000
                  "normal"
-               when 10_001
+               when 10_001..30000
                  "bronze"
                when 30_001
                  "silver"
