@@ -26,11 +26,11 @@ module Mogec
         total_price = Item.where(id: items).sum(:price)
 
         rank = case total_price
-               when 0..10_000
+               when 10_000
                  "normal"
-               when 10_001..30_000
+               when 10_001
                  "bronze"
-               when 30_001..70_000
+               when 30_001
                  "silver"
                end
 
