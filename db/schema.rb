@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20180323071005) do
 
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
-    t.string "rank", default: "bronze"
+    t.string "rank", default: "normal"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
