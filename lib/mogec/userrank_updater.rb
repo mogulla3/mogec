@@ -26,14 +26,13 @@ module Mogec
         total_price = Item.where(id: items).sum(:price)
 
         rank = case total_price
-               when 10001..30000
-                 "bronze"
-               else
+               when 0..10_000
                  "normal"
+               when 10_001..30_000
+                 "bronze"
                end
 
-        user = User.find_by(id: user_id)
-        user.update(rank: rank)
+        User.find_by(id: user_id).update(rank: rank)
       end
     end
   end

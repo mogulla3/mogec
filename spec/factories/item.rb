@@ -1,9 +1,14 @@
 FactoryBot.define do
   factory :item do
+    name "item"
+    association :store, factory: :store
+
+    factory :item_10000 do
+      price 10000
+    end
+
     factory :item_10001 do
-      name "item"
-      association :store, factory: :store
-      price 10_001
+      price 10001
     end
   end
 end
