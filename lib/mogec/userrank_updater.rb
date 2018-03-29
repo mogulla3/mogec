@@ -4,11 +4,12 @@ module Mogec
 
     def initialize(opt = {})
       @dryrun = opt.fetch(:dryrun, false)
-      @user = Array(opt.fetch(:user))
+      @user = opt.fetch(:user, [])
       @log = Logger.new(opt[:log] || STDOUT)
     end
 
     def run
+      @user = User.pluck(:id) if @user.empty?
       @user.each do |user_id|
         # (先月末から1年前) ~ (先月末)
         # from: A year ago from the end of last month
