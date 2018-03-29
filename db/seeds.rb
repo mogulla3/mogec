@@ -8,7 +8,7 @@
 end
 
 # Create items
-price_range = 100.step(30000, 100).to_a
+price_range = 100.step(10000, 100).to_a
 Store.select(:id, :name).each do |store|
   Random.rand(1..20).times do |n|
     item = Item.create(name: "item#{n}-#{store.name}", price: price_range.sample, store_id: store.id)
