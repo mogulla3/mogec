@@ -5,7 +5,7 @@ module Mogec
     def initialize(opt = {})
       @dryrun = opt.fetch(:dryrun, false)
       @user = Array(opt.fetch(:user))
-      @log = opt.fetch(:log, nil)
+      @log = Logger.new(opt[:log] || STDOUT)
     end
 
     def run
@@ -33,7 +33,15 @@ module Mogec
                when 100001..Float::INFINITY then "pratinum"
                end
 
-        User.find_by(id: user_id).update(rank: rank)
+        user = User.find_by(id: user_id)
+
+        # FIXME: duplicated code
+        if @dryrun
+          @log.info("[dryrun] Updated rank of #{user.name}(id:#{user.id}) from '#{user.rank}' to '#{rank}'. purchased price => #{total_price}")
+        else
+          @log.info("Updated rank of #{user.name}(id:#{user.id}) from '#{user.rank}' to '#{rank}'. purchased price => #{total_price}")
+          user.update(rank: rank)
+        end
       end
     end
   end
