@@ -5,12 +5,35 @@ module Mogec
     def initialize(opt = {})
       @dryrun = opt.fetch(:dryrun, false)
       @user = opt.fetch(:user, [])
+      @user_file = opt.fetch(:file, nil)
       @log = Logger.new(opt[:log] || STDOUT)
     end
 
     def run
-      @user = User.pluck(:id) if @user.empty?
-      @user.each do |user_id|
+      Signal.trap(:INT) do
+        unless @dryrun
+          unprocessed_users = @target_users - @completed_users
+          File.write("./unprocessed_users.txt", unprocessed_users.join("\n"))
+          puts "aborted because SIGINT is called. And wrote unprocessed user's id to ./unprocessed_users.txt"
+        end
+
+        exit 1
+      end
+
+      # 対象ユーザの決定
+      # 1. userオプション
+      # 2. fileオプション
+      # 3. 全user
+      @target_users = if @user.present?
+                        @user
+                      elsif @user_file
+                        File.read(@user_file).split("\n")
+                      else
+                        User.pluck(:id)
+                      end
+
+      @completed_users = []
+      @target_users.each do |user_id|
         # (先月末から1年前) ~ (先月末)
         # from: A year ago from the end of last month
         # to: end of last month
@@ -43,6 +66,8 @@ module Mogec
           @log.info("Updated rank of #{user.name}(id:#{user.id}) from '#{user.rank}' to '#{rank}'. purchased price => #{total_price}")
           user.update(rank: rank)
         end
+
+        @completed_users << user_id
       end
     end
   end

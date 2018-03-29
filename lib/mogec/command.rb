@@ -20,6 +20,10 @@ module Mogec
         @options[:log] = v
       end
 
+      opt.on("-f", "--file=FILE_PATH", "path of file that is listed in target users") do |v|
+        @options[:file] = v
+      end
+
       opt.on("-h", "--help", "Show this message") do
         puts opt
         exit 1
