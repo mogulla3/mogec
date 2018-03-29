@@ -6,7 +6,7 @@ RSpec.describe Mogec::UserRankUpdater do
     shared_examples "user rank is not changed" do
       it "should not change user rank" do
         expect {
-          Mogec::UserRankUpdater.new(user: user.id).run
+          Mogec::UserRankUpdater.new(user: [user.id], log: "/dev/null").run
         }.to_not change { user.reload.rank }
       end
     end
@@ -14,7 +14,7 @@ RSpec.describe Mogec::UserRankUpdater do
     shared_examples "user rank is changed according to purchase price" do
       it "should change user rank" do
         expect {
-          Mogec::UserRankUpdater.new(user: user.id).run
+          Mogec::UserRankUpdater.new(user: [user.id], log: "/dev/null").run
         }.to change { user.reload.rank }.from("normal").to(rank)
       end
     end
