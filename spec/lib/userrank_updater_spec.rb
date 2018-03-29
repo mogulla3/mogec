@@ -19,6 +19,16 @@ RSpec.describe Mogec::UserRankUpdater do
       end
     end
 
+    context "when user purchased 30000 yen 13 months ago" do
+      let(:user) { FactoryBot.create(:user, :purchased, price: 30000, ordered_at: 13.months.ago) }
+      include_examples "user rank is not changed"
+    end
+
+    context "when user purchased 30000 yen this month" do
+      let(:user) { FactoryBot.create(:user, :purchased, price: 30000, ordered_at: Time.zone.now) }
+      include_examples "user rank is not changed"
+    end
+
     context "when user purchased 0 yen" do
       let(:user) { FactoryBot.create(:user) }
       include_examples "user rank is not changed"

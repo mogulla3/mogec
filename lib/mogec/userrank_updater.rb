@@ -15,9 +15,9 @@ module Mogec
         # to: end of last month
         #
         # Example
-        # now:    2018-03-25 10:00:00
-        # before: 2017-03-01 00:00:00
-        # to:     2018-02-28 23:59:59
+        # now: 2018-03-25 10:00:00
+        # from => 2017-03-01 00:00:00
+        # to => 2018-02-28 23:59:59
         basetime = Time.zone.now.beginning_of_month
         from = basetime - 1.year
         to = basetime - 1.seconds
