@@ -5,13 +5,13 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.1.4'
+gem 'rails'
 gem 'sqlite3'
 gem 'pry-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails', '~> 3.7'
+  gem 'rspec-rails'
   gem 'factory_bot_rails'
 end
 
